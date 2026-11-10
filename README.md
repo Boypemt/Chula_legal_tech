@@ -1,52 +1,47 @@
-# Chula Legal Tech — web starter
+# JurisMatrix AI — UI prototype
 
-A minimal static web starter: semantic HTML, a small CSS token layer with
-light/dark themes, and vanilla ES modules. No build step, no dependencies.
+Frontend prototype of the JurisMatrix AI evidence dashboard (Chula LegalTech Year 8).
+React + TypeScript + Tailwind CSS, built with Vite. **Mock data only — no backend yet.**
+
+## Run locally
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+```
+
+## Deploy on Vercel
+
+1. Push this repo to GitHub.
+2. In Vercel: **Add New → Project → import `Chula_legal_tech`**.
+3. Vercel detects Vite automatically (build `npm run build`, output `dist`). Click **Deploy**.
+
+## Demo flow (3 minutes)
+
+The page opens on a finished analysis, ready for screenshots.
+
+1. Click **เริ่มคดีใหม่** → **โหลดคดีตัวอย่างและวิเคราะห์** to show the 4 processing steps animating.
+2. Point at the red row (E5) — the evidence gap alert.
+3. Click **แนะนำแนวฎีกา** on any row for the Mini-RAG popup.
+4. Click **ส่งออกบัญชีระบุพยาน (PDF)** for the court-form preview (real names are restored here; the AI only saw `[PERSON_A]`).
+
+Press **Esc** to close any popup.
 
 ## Project layout
 
 ```
-.
-├── index.html        # Page shell: header, hero, sections, footer
-├── css/
-│   └── styles.css    # Design tokens, base styles, components
-├── js/
-│   ├── main.js       # Entry point — wires up the page
-│   └── theme.js      # Light/dark theme toggle with localStorage
-├── package.json      # Dev-server scripts only (no dependencies)
-├── .editorconfig
-└── .gitignore
+src/
+├── data/mockCase.ts       # Mock API response — replace with the real Java backend later
+├── types.ts               # Mirrors the API contract (one row = one legal element)
+├── App.tsx                # Page layout and demo state
+└── components/
+    ├── Sidebar.tsx        # Case info, upload, processing steps
+    ├── Matrix.tsx         # Stat cards and the Fact-to-Evidence table
+    └── Modals.tsx         # Ruling popup and export preview
 ```
 
-## Running it locally
+## Rules for when the real backend arrives
 
-The page uses ES modules, so open it over HTTP rather than double-clicking the
-file (`file://` blocks module imports).
-
-```bash
-npm start              # npx serve . — needs network on first run
-# or
-python -m http.server 3000
-```
-
-Then visit <http://localhost:3000>.
-
-## Where to make changes
-
-- **Colours, spacing, fonts** — the `:root` token blocks at the top of
-  [css/styles.css](css/styles.css). Dark mode overrides sit right below them, in
-  both a `prefers-color-scheme` block and a `[data-theme="dark"]` block.
-- **Page content** — [index.html](index.html). Each `<section>` has an `id` that
-  the nav links to.
-- **Behaviour** — [js/main.js](js/main.js). The counter and contact-form
-  handlers are demos; delete them once you have real features.
-
-## Next steps
-
-Pick these up as the project needs them, not upfront:
-
-- Add more pages as sibling HTML files, sharing `css/` and `js/`.
-- Point the contact form at a real endpoint in `initForm()`.
-- Add a bundler or a framework later — nothing here has to be undone first.
-- Deploy by uploading the folder to any static host (GitHub Pages, Netlify,
-  Cloudflare Pages).
+- **Frontend is dumb:** render the JSON only. `is_missing` comes from the backend; never compute legal logic here.
+- Swap `mockCase` for a `fetch` call to the Spring Boot API that returns the same shape as `CaseResult` in `types.ts`.
+- The legal checklist and rulings in `mockCase.ts` are fictional placeholders — the law team must supply the real ones.
