@@ -1,0 +1,17 @@
+{
+  "name": "chula-legal-tech",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static web starter for the Chula Legal Tech project.",
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes serve . -l 3000",
+    "dev": "npx --yes serve . -l 3000"
+  },
+  "keywords": [
+    "legal-tech",
+    "static-site",
+    "starter"
+  ],
+  "license": "MIT"
+}

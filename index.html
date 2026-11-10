@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chula Legal Tech</title>
+    <meta
+      name="description"
+      content="A starter web project for the Chula Legal Tech initiative."
+    />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">CL</span>
+          <span class="brand-name">Chula Legal Tech</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-nav"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+
+        <nav id="primary-nav" class="site-nav" aria-label="Primary">
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <button class="theme-toggle" type="button" data-theme-toggle>
+            <span class="sr-only">Toggle colour theme</span>
+            <span aria-hidden="true" data-theme-icon>◐</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow">Starter project</p>
+          <h1>Build legal tools people can actually use.</h1>
+          <p class="lead">
+            A minimal, dependency-free web starter: semantic HTML, a small CSS
+            design-token layer, and vanilla JavaScript. Replace this copy and
+            start shipping.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#features">Get started</a>
+            <a class="btn btn-ghost" href="#about">Learn more</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="container">
+          <h2>What's included</h2>
+          <ul class="card-grid">
+            <li class="card">
+              <h3>No build step</h3>
+              <p>
+                Open <code>index.html</code> or serve the folder. No bundler, no
+                install, nothing to configure.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Design tokens</h3>
+              <p>
+                Colours, spacing, and typography live as CSS custom properties
+                in one place, with light and dark themes.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Accessible shell</h3>
+              <p>
+                Skip link, labelled controls, keyboard-friendly navigation, and
+                visible focus styles out of the box.
+              </p>
+            </li>
+            <li class="card">
+              <h3>Room to grow</h3>
+              <p>
+                Plain ES modules in <code>js/</code>, so you can add a framework
+                or a bundler later without undoing anything.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="about" class="section section-muted">
+        <div class="container narrow">
+          <h2>About</h2>
+          <p>
+            This is a placeholder section. Describe the project, the problem it
+            addresses, and who it is for. Keep paragraphs short — most readers
+            skim.
+          </p>
+          <p>
+            Counter demo (proof the JavaScript is wired up):
+            <button class="btn btn-ghost" type="button" data-counter>
+              Clicked <span data-counter-value>0</span> times
+            </button>
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="section">
+        <div class="container narrow">
+          <h2>Contact</h2>
+          <p>Swap in a real endpoint or mailto address when you have one.</p>
+          <form class="form" data-demo-form novalidate>
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Send</button>
+            <p class="form-status" role="status" data-form-status></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span data-year>2026</span> Chula Legal Tech</p>
+        <p>Built from a static starter template.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
