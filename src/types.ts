@@ -10,11 +10,13 @@ export interface MatrixRow {
   legal_element: string;
   evidence: EvidenceRef[];
   is_missing: boolean; // decided by the backend, never by the frontend
+  short: string; // short label for the completeness strip
   hint?: string;
 }
 
 export interface CaseFile {
   file_id: string;
+  exhibit: string; // exhibit mark, e.g. จ.1
   name: string;
   type: "image" | "pdf";
 }

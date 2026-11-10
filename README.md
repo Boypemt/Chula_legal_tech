@@ -20,12 +20,13 @@ npm run dev        # http://localhost:5173
 
 The page opens on a finished analysis, ready for screenshots.
 
-1. Click **เริ่มคดีใหม่** → **โหลดคดีตัวอย่างและวิเคราะห์** to show the 4 processing steps animating.
-2. Point at the red row (E5) — the evidence gap alert.
-3. Click **แนะนำแนวฎีกา** on any row for the Mini-RAG popup.
-4. Click **ส่งออกบัญชีระบุพยาน (PDF)** for the court-form preview (real names are restored here; the AI only saw `[PERSON_A]`).
+1. Click **เริ่มคดีใหม่**, then **เพิ่มพยานเอกสาร** three times to add exhibits จ.1–จ.3.
+2. Click **ตรวจพยานหลักฐาน**: the 4 steps run and the ledger fills in; a red stamp lands on the missing element (E5).
+3. Hover an exhibit (e.g. จ.1) to highlight every element it proves.
+4. Click **ดูแนวฎีกา** on any row to open the ruling drawer.
+5. Click **ส่งออกบัญชีระบุพยาน** for the court-form preview (real names are restored here; the AI only saw `[PERSON_A]`).
 
-Press **Esc** to close any popup.
+Press **Esc** to close any panel. Fonts are bundled (no Google Fonts call), so the page looks the same offline.
 
 ## Project layout
 
@@ -34,10 +35,11 @@ src/
 ├── data/mockCase.ts       # Mock API response — replace with the real Java backend later
 ├── types.ts               # Mirrors the API contract (one row = one legal element)
 ├── App.tsx                # Page layout and demo state
+├── index.css              # Design tokens (colours, fonts) and the stamp/highlighter styles
 └── components/
-    ├── Sidebar.tsx        # Case info, upload, processing steps
-    ├── Matrix.tsx         # Stat cards and the Fact-to-Evidence table
-    └── Modals.tsx         # Ruling popup and export preview
+    ├── Sidebar.tsx        # Folder rail: parties, exhibits (จ.1…), processing steps
+    ├── Matrix.tsx         # Completeness strip and the evidence ledger
+    └── Modals.tsx         # Ruling drawer and court-form export preview
 ```
 
 ## Rules for when the real backend arrives

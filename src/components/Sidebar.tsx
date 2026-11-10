@@ -1,114 +1,130 @@
-import { Check, FileImage, FileText, Loader2, UploadCloud, Briefcase, ShieldCheck } from "lucide-react";
+import { Check, FilePlus2, FileImage, FileText } from "lucide-react";
 import type { CaseFile } from "../types";
 
-function Card({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+function RailSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 flex items-center gap-2 text-[15px] font-semibold text-navy-700">
-        {icon}
-        {title}
-      </h2>
+    <section className="border-b border-folder-edge px-6 py-5 last:border-b-0">
+      <h2 className="mb-3 text-sm font-semibold text-court-dark">{title}</h2>
       {children}
     </section>
   );
 }
 
-export function CaseInfoCard({ plaintiff, defendant }: { plaintiff: string; defendant: string }) {
+export function PartiesSection({
+  plaintiff,
+  defendant,
+  onChange,
+}: {
+  plaintiff: string;
+  defendant: string;
+  onChange: (who: "plaintiff" | "defendant", v: string) => void;
+}) {
+  const field = "w-full rounded-md border border-folder-edge bg-white/80 px-3 py-2 text-[15px] text-ink focus:border-court focus:bg-white focus:outline-none";
   return (
-    <Card title="ข้อมูลคดี" icon={<Briefcase className="h-4 w-4" />}>
-      <label className="mb-1 block text-sm font-medium text-slate-600">ประเภทคดี</label>
-      <select className="mb-4 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm" defaultValue="loan">
-        <option value="loan">คดีกู้ยืมเงิน</option>
-      </select>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slate-600">ชื่อโจทก์</label>
-          <input className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" defaultValue={plaintiff} />
-        </div>
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slate-600">ชื่อจำเลย</label>
-          <input className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" defaultValue={defendant} />
-        </div>
-      </div>
-      <p className="mt-2 flex items-start gap-1.5 text-xs text-slate-500">
-        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-        ใช้สำหรับปิดบังชื่อในเอกสารก่อนส่งให้ AI
+    <RailSection title="คู่ความ">
+      <label className="mb-3 block">
+        <span className="mb-1 block text-xs text-ink-soft">โจทก์</span>
+        <input className={field} value={plaintiff} onChange={(e) => onChange("plaintiff", e.target.value)} />
+      </label>
+      <label className="block">
+        <span className="mb-1 block text-xs text-ink-soft">จำเลย</span>
+        <input className={field} value={defendant} onChange={(e) => onChange("defendant", e.target.value)} />
+      </label>
+      <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+        ชื่อจริงอยู่บนเซิร์ฟเวอร์ของเราเท่านั้น AI จะเห็นเป็น <code className="rounded bg-white/70 px-1 text-[11px]">[PERSON_A]</code> และ{" "}
+        <code className="rounded bg-white/70 px-1 text-[11px]">[PERSON_B]</code>
       </p>
-    </Card>
+    </RailSection>
   );
 }
 
-export function UploadCard({ files, onAnalyze, busy }: { files: CaseFile[]; onAnalyze: () => void; busy: boolean }) {
+export function ExhibitsSection({
+  files,
+  activeFile,
+  onHover,
+  onAdd,
+  canAdd,
+}: {
+  files: CaseFile[];
+  activeFile: string | null;
+  onHover: (id: string | null) => void;
+  onAdd: () => void;
+  canAdd: boolean;
+}) {
   return (
-    <Card title="อัปโหลดพยานหลักฐาน" icon={<UploadCloud className="h-4 w-4" />}>
-      <div className="mb-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-navy-100 bg-navy-50/60 px-4 py-6 text-center">
-        <UploadCloud className="mb-2 h-8 w-8 text-navy-600" />
-        <p className="text-sm font-medium text-navy-700">ลากไฟล์มาวาง หรือคลิกเพื่อเลือกไฟล์</p>
-        <p className="text-xs text-slate-500">รองรับ JPG, PNG, PDF</p>
-      </div>
-      <ul className="space-y-2">
-        {files.map((f) => (
-          <li key={f.file_id} className="flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm animate-fade-in">
-            {f.type === "pdf" ? (
-              <FileText className="h-5 w-5 text-rose-500" />
-            ) : (
-              <FileImage className="h-5 w-5 text-sky-600" />
-            )}
-            <span className="flex-1 truncate">{f.name}</span>
-            <Check className="h-4 w-4 text-emerald-600" />
-          </li>
-        ))}
-        {files.length === 0 && <li className="text-center text-sm text-slate-400">ยังไม่มีไฟล์</li>}
+    <RailSection title="พยานเอกสาร">
+      <ul className="space-y-1.5">
+        {files.map((f) => {
+          const active = activeFile === f.file_id;
+          return (
+            <li
+              key={f.file_id}
+              tabIndex={0}
+              onMouseEnter={() => onHover(f.file_id)}
+              onMouseLeave={() => onHover(null)}
+              onFocus={() => onHover(f.file_id)}
+              onBlur={() => onHover(null)}
+              className={`row-fill flex cursor-default items-center gap-3 rounded-md border px-3 py-2.5 transition-colors ${
+                active ? "border-court bg-white" : "border-transparent bg-white/55 hover:bg-white"
+              }`}
+            >
+              <span className="w-9 shrink-0 font-serif text-[17px] font-semibold text-court">{f.exhibit}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm text-ink">{f.name}</span>
+                <span className="flex items-center gap-1 text-[11px] text-ink-faint">
+                  {f.type === "pdf" ? <FileText className="h-3 w-3" /> : <FileImage className="h-3 w-3" />}
+                  {f.type === "pdf" ? "PDF" : "รูปภาพ"}
+                </span>
+              </span>
+            </li>
+          );
+        })}
       </ul>
-      <button
-        onClick={onAnalyze}
-        disabled={busy}
-        className="mt-4 w-full rounded-lg bg-navy-700 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-800 disabled:opacity-60"
-      >
-        {busy ? "กำลังวิเคราะห์..." : "วิเคราะห์พยานหลักฐาน"}
-      </button>
-    </Card>
+      {canAdd && (
+        <button
+          onClick={onAdd}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-court/40 px-3 py-4 text-sm text-court transition-colors hover:border-court hover:bg-white/60"
+        >
+          <FilePlus2 className="h-4 w-4" />
+          {files.length ? "เพิ่มพยานเอกสาร" : "เพิ่มพยานเอกสาร (รูปภาพหรือ PDF)"}
+        </button>
+      )}
+      {files.length > 0 && (
+        <p className="mt-2 text-[11px] text-ink-faint">ชี้ที่พยานเพื่อดูว่าใช้พิสูจน์องค์ประกอบใดบ้าง</p>
+      )}
+    </RailSection>
   );
 }
 
 const STEPS = [
   "อ่านข้อความด้วย OCR บนเซิร์ฟเวอร์ของเรา",
-  "ปิดบังข้อมูลส่วนบุคคล (PII Masking)",
-  "AI จับคู่หลักฐานกับเช็กลิสต์",
-  "ตรวจหาหลักฐานที่ขาด",
+  "ปิดชื่อและเลขบัตรก่อนส่งให้ AI",
+  "AI จับคู่พยานกับองค์ประกอบ",
+  "ตรวจหาองค์ประกอบที่ยังไม่มีพยาน",
 ];
 
-/** step = number of completed steps (0..4). */
-export function PipelineCard({ step }: { step: number }) {
+/** step = number of completed steps; -1 = not started. */
+export function ProcessSection({ step }: { step: number }) {
   return (
-    <Card title="ขั้นตอนการประมวลผล" icon={<Loader2 className="h-4 w-4" />}>
-      <ol>
+    <RailSection title="ขั้นตอนการตรวจ">
+      <ol className="space-y-2.5">
         {STEPS.map((label, i) => {
           const done = i < step;
           const active = i === step;
           return (
-            <li key={label} className="relative flex gap-3 pb-4 last:pb-0">
-              {i < STEPS.length - 1 && (
-                <span className={`absolute left-[13px] top-7 h-[calc(100%-20px)] w-0.5 ${done ? "bg-emerald-500" : "bg-slate-200"}`} />
-              )}
+            <li key={label} className="flex items-start gap-2.5 text-[13px]">
               <span
-                className={`relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-                  done
-                    ? "bg-emerald-500 text-white"
-                    : active
-                      ? "bg-navy-700 text-white"
-                      : "bg-slate-100 text-slate-400"
+                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold ${
+                  done ? "bg-court text-white" : active ? "border-2 border-court text-court" : "border border-folder-edge text-ink-faint"
                 }`}
               >
-                {done ? <Check className="h-4 w-4" /> : active ? <Loader2 className="h-4 w-4 animate-spin" /> : i + 1}
+                {done ? <Check className="h-3 w-3" strokeWidth={3} /> : i + 1}
               </span>
-              <span className={`pt-1 text-sm ${done ? "text-slate-700" : active ? "font-semibold text-navy-700" : "text-slate-400"}`}>
-                {label}
-              </span>
+              <span className={done ? "text-ink" : active ? "font-semibold text-court-dark" : "text-ink-faint"}>{label}</span>
             </li>
           );
         })}
       </ol>
-    </Card>
+    </RailSection>
   );
 }

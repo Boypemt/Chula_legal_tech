@@ -1,55 +1,40 @@
-import { Download, Scale, X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import type { MatrixRow, Ruling, WitnessItem } from "../types";
 
-function Overlay({ onClose, children, wide }: { onClose: () => void; children: React.ReactNode; wide?: boolean }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-6 animate-fade-in" onClick={onClose}>
-      <div
-        className={`max-h-full w-full overflow-auto rounded-2xl bg-white shadow-2xl ${wide ? "max-w-4xl" : "max-w-2xl"}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
-
+/** Side drawer: keeps the ledger visible while reading rulings. */
 export function RulingsModal({ row, rulings, onClose }: { row: MatrixRow; rulings: Ruling[]; onClose: () => void }) {
   return (
-    <Overlay onClose={onClose}>
-      <header className="flex items-start justify-between border-b border-slate-200 px-6 py-4">
-        <div>
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-navy-700">
-            <Scale className="h-5 w-5" /> แนวคำพิพากษาที่เกี่ยวข้อง
-          </h3>
-          <p className="text-sm text-slate-500">
-            {row.element_id} · {row.legal_element}
-          </p>
-        </div>
-        <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100">
-          <X className="h-5 w-5" />
-        </button>
-      </header>
-      <div className="space-y-4 px-6 py-5">
-        {rulings.map((r) => (
-          <article key={r.title} className="rounded-xl border border-slate-200 p-4">
-            <div className="mb-2 flex items-center justify-between gap-4">
-              <h4 className="font-semibold text-slate-800">{r.title}</h4>
-              <div className="flex w-44 items-center gap-2">
-                <span className="text-xs text-slate-500">ความเกี่ยวข้อง</span>
-                <div className="h-2 flex-1 rounded-full bg-slate-100">
-                  <div className="h-2 rounded-full bg-navy-600" style={{ width: `${r.relevance}%` }} />
-                </div>
-                <span className="text-xs font-semibold text-navy-700">{r.relevance}%</span>
+    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="แนวคำพิพากษาที่เกี่ยวข้อง">
+      <div className="absolute inset-0 bg-ink/20" onClick={onClose} />
+      <aside className="drawer-in absolute inset-y-0 right-0 flex w-full max-w-[460px] flex-col border-l border-line bg-paper shadow-[-12px_0_32px_rgba(23,32,42,.10)]">
+        <header className="flex items-start justify-between gap-4 border-b border-line px-6 py-5">
+          <div>
+            <p className="text-xs text-ink-faint">แนวฎีกาสำหรับ {row.element_id}</p>
+            <h3 className="mt-1 font-serif text-xl leading-snug text-ink">{row.legal_element}</h3>
+          </div>
+          <button onClick={onClose} aria-label="ปิด" className="rounded-md p-1.5 text-ink-faint hover:bg-white hover:text-ink">
+            <X className="h-5 w-5" />
+          </button>
+        </header>
+        <div className="flex-1 space-y-4 overflow-auto px-6 py-5">
+          {rulings.map((r) => (
+            <article key={r.title} className="rounded-lg border border-line bg-white p-5">
+              <div className="mb-2 flex items-baseline justify-between gap-3">
+                <h4 className="font-serif text-[17px] font-semibold text-ink">{r.title}</h4>
+                <span className="shrink-0 text-xs text-court">ใกล้เคียง {r.relevance}%</span>
               </div>
-            </div>
-            <p className="text-sm leading-relaxed text-slate-600">{r.summary}</p>
-            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm italic text-amber-900 ring-1 ring-amber-200">{r.excerpt}</p>
-          </article>
-        ))}
-        <p className="text-xs text-slate-400">ผลการค้นหาเป็นข้อมูลประกอบ ทนายความควรตรวจสอบต้นฉบับคำพิพากษาก่อนใช้งาน</p>
-      </div>
-    </Overlay>
+              <p className="text-sm leading-relaxed text-ink-soft">{r.summary}</p>
+              <p className="mt-3 border-l-2 border-court pl-3 text-[15px] leading-relaxed text-ink">
+                <span className="mark">{r.excerpt}</span>
+              </p>
+            </article>
+          ))}
+        </div>
+        <p className="border-t border-line px-6 py-4 text-xs leading-relaxed text-ink-faint">
+          ผลการค้นหาจากคลังฎีกาของระบบเป็นข้อมูลประกอบ ทนายความควรตรวจต้นฉบับคำพิพากษาก่อนอ้างอิง
+        </p>
+      </aside>
+    </div>
   );
 }
 
@@ -65,60 +50,60 @@ export function ExportModal({
   onClose: () => void;
 }) {
   return (
-    <Overlay onClose={onClose} wide>
-      <header className="flex items-center justify-between border-b border-slate-200 px-6 py-3">
-        <h3 className="font-semibold text-navy-700">ตัวอย่างเอกสารก่อนส่งออก</h3>
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#3a4148]" role="dialog" aria-modal="true" aria-label="ตัวอย่างบัญชีระบุพยาน">
+      <header className="flex items-center justify-between bg-ink px-6 py-3 text-white">
+        <div>
+          <p className="text-sm font-semibold">บัญชีระบุพยาน (ร่าง)</p>
+          <p className="text-xs text-white/60">ใส่ชื่อจริงของคู่ความกลับเข้าไปบนเซิร์ฟเวอร์ของเราแล้ว</p>
+        </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 rounded-lg bg-navy-700 px-4 py-2 text-sm font-semibold text-white hover:bg-navy-800">
+          <button className="flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-folder">
             <Download className="h-4 w-4" /> ดาวน์โหลด PDF
           </button>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100">
+          <button onClick={onClose} aria-label="ปิด" className="rounded-md p-2 text-white/70 hover:bg-white/10 hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>
       </header>
-      <div className="bg-slate-200 p-8">
-        {/* A4-ish page */}
-        <div className="mx-auto aspect-[1/1.414] w-full max-w-[620px] bg-white px-14 py-12 text-[15px] shadow-lg">
-          <h1 className="mt-2 text-center text-2xl font-bold">บัญชีระบุพยาน</h1>
-          <div className="mt-6 space-y-1 text-sm leading-7">
+      <div className="flex-1 overflow-auto px-6 py-10">
+        <div className="mx-auto aspect-[1/1.414] w-full max-w-[640px] bg-white px-16 py-14 font-doc text-[16px] leading-8 text-black shadow-2xl">
+          <h1 className="text-center text-[26px] font-bold">บัญชีระบุพยาน</h1>
+          <div className="mt-8">
             <p>
-              ความ<span className="font-semibold"> แพ่ง</span>
-              <span className="ml-8">ศาล ..............................</span>
+              คดีแพ่ง <span className="ml-24">ศาล ..........................................</span>
             </p>
-            <p>
-              ระหว่าง <span className="font-semibold">{plaintiff}</span> โจทก์
+            <p className="mt-2">
+              ระหว่าง <span className="font-semibold">{plaintiff}</span> <span className="ml-6">โจทก์</span>
             </p>
-            <p className="pl-12">
-              <span className="font-semibold">{defendant}</span> จำเลย
+            <p className="pl-[3.6rem]">
+              <span className="font-semibold">{defendant}</span> <span className="ml-6">จำเลย</span>
             </p>
-            <p className="pt-2">ข้าพเจ้า โจทก์ ขอระบุพยานเพื่อนำสืบในคดีนี้ ดังต่อไปนี้</p>
+            <p className="mt-4 indent-12">ข้าพเจ้า โจทก์ ขอระบุพยานเพื่อนำสืบในคดีนี้ ดังต่อไปนี้</p>
           </div>
-          <table className="mt-4 w-full border-collapse text-sm">
+          <table className="mt-5 w-full border-collapse text-[15px] leading-7">
             <thead>
               <tr>
-                <th className="w-14 border border-slate-700 py-2">ลำดับ</th>
-                <th className="border border-slate-700 py-2">รายการพยานหลักฐาน</th>
-                <th className="border border-slate-700 py-2">ประเด็นที่ต้องการพิสูจน์</th>
+                <th className="w-16 border border-black py-1.5 font-semibold">ลำดับ</th>
+                <th className="border border-black py-1.5 font-semibold">รายการพยานหลักฐาน</th>
+                <th className="border border-black py-1.5 font-semibold">ประเด็นที่ต้องการพิสูจน์</th>
               </tr>
             </thead>
             <tbody>
               {items.map((w) => (
                 <tr key={w.no}>
-                  <td className="border border-slate-700 py-2 text-center align-top">{w.no}</td>
-                  <td className="border border-slate-700 px-3 py-2 align-top">{w.item}</td>
-                  <td className="border border-slate-700 px-3 py-2 align-top">{w.issue}</td>
+                  <td className="border border-black py-1.5 text-center align-top">{w.no}</td>
+                  <td className="border border-black px-3 py-1.5 align-top">{w.item}</td>
+                  <td className="border border-black px-3 py-1.5 align-top">{w.issue}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className="mt-12 text-right text-sm leading-8">
-            <p>ลงชื่อ ......................................... ผู้ระบุพยาน</p>
-            <p className="pr-16">( ......................................... )</p>
+          <div className="mt-14 text-right">
+            <p>ลงชื่อ ............................................ ผู้ระบุพยาน</p>
+            <p className="pr-20">( ............................................ )</p>
           </div>
-          <p className="mt-10 text-center text-[11px] text-slate-400">สร้างโดย JurisMatrix AI · เอกสารร่าง ทนายความต้องตรวจทานก่อนยื่นต่อศาล</p>
         </div>
       </div>
-    </Overlay>
+    </div>
   );
 }
