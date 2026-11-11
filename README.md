@@ -24,7 +24,7 @@ The page opens on a finished analysis, ready for screenshots.
 2. Click **ตรวจพยานหลักฐาน**: the 4 steps run and the ledger fills in; a red stamp lands on the missing element (E5).
 3. Hover an exhibit (e.g. จ.1) to highlight every element it proves.
 4. Click **ดูแนวฎีกา** on any row to open the ruling drawer.
-5. Click **ส่งออกบัญชีระบุพยาน** for the court-form preview (real names are restored here; the AI only saw `[PERSON_A]`).
+5. Click **ส่งออกบัญชีระบุพยาน** for the court-form preview (real names are restored here; the AI only saw `[PERSON_A]`), then **ดาวน์โหลด PDF** to save a real A4 PDF. Names typed into the คู่ความ fields appear in the PDF.
 
 Press **Esc** to close any panel. Fonts are bundled (no Google Fonts call), so the page looks the same offline.
 
